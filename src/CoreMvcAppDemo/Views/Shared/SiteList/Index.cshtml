@@ -1,0 +1,8 @@
+﻿@model List<CoreMvcAppDemo.Models.Site>
+
+<ul>
+    @foreach (var t in Model)
+    {
+        <li><a href="@t.Url" target="_blank">@t.Title (@t.Description)</a></li>
+    }
+</ul>

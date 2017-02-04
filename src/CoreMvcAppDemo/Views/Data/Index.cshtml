@@ -1,0 +1,27 @@
+﻿@using CoreMvcAppDemo.Models
+@model IEnumerable<Data>
+@inject DataFinder Finder
+
+<h2>Data List</h2>
+<h3>Get All Data</h3>
+<ul>
+    @foreach (var data in Model)
+    {
+        <li>@data.Id: @data.Name, @data.Title</li>
+    }
+</ul>
+<hr />
+
+<h3>Get Single Data</h3>
+@{ 
+    var first = await Finder.GetDataById(1);
+}
+
+<div>
+    First Data: @first.Id, @first.Name, @first.Title
+</div>
+
+<h3>Call View Component</h3>
+<div>
+    @await Component.InvokeAsync("DataList", new { name="Kimberly Kim" })
+</div>

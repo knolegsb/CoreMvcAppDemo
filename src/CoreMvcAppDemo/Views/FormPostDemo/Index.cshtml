@@ -1,0 +1,29 @@
+﻿@{ 
+    Layout = null;
+}
+
+<h2>Form Data Post</h2>
+
+<h3>Implementation by HTML Tag</h3>
+
+<form action="/FormPostDemo/Index" method="post">
+    Name: <input type="text" name="name" value="" /><br />
+    Content: <input type="text" name="content" value="" /><br />
+
+    <input type="submit" value="Send" />
+</form>
+
+<h3>Implementation by Helper Method</h3>
+@using (Html.BeginForm())
+{
+    @Html.Label("Name: ")
+    @Html.TextBox("name")<br />
+    @Html.Label("Content")
+    @Html.TextBox("content")<br />
+
+    <input type="submit" value="Send" />
+}
+
+<hr />
+
+<p>@ViewBag.Result</p>

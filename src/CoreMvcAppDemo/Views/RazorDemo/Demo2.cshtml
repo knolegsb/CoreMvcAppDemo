@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+
+<h2>Condition and Iteration</h2>
+
+@{
+    int age = 21;
+}
+
+<div>
+    Age: @age
+    (
+    @if (age % 2 == 0)
+    {
+        <span>Even number</span> <text>Age</text>
+    }
+    else
+    {
+        <text>Odd number</text> @:age
+    }
+    )
+</div>
+<div>
+    @for (int i = 0; i < 10; i++)
+    {
+        <span>@i&nbsp;</span>
+    }
+</div>
+<h2>Incoding Output</h2>
+@{
+    var js = "<script>document.write('Razor Expression');</script>";
+}
+<div>
+    @js,<br />
+    @Html.Raw(js)
+</div>
+<h2>Path Resolution</h2>
+<a href="~/Home/Index">Home</a>

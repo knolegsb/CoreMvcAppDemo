@@ -1,0 +1,32 @@
+﻿@{ 
+    Layout = null;
+}
+
+<h1>Razor Expression Exercise</h1>
+
+<h2>Variable Decalaration and Annotation</h2>
+@{ 
+    var sum = 1234;
+}
+
+@{ 
+    var msg = "Hello";
+    var file = @"D:\VisualStudio2015\Projects\CoreMvcAppDemo\";
+    var quote = @"Hello. ""ASP.NET Core"" ";
+}
+
+<h2>Inline Expression</h2>
+<p>Total: @sum, Message: @msg</p>
+<p>Path: @file, @quote</p>
+
+<div>
+    Email: aspnet@example.com, a@("@")a.com
+</div>
+<div>
+    Twitter: @@extermasp
+</div>
+
+<h2>API Output</h2>
+<div>
+    @DateTime.Now.ToString()
+</div>
