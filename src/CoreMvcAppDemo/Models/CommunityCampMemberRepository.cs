@@ -16,9 +16,9 @@ namespace CoreMvcAppDemo.Models
         public CommunityCampMemberRepository(IConfiguration config)
         {
             _config = config;
-            con = new SqlConnection(_config.GetSection("Data")
-                        .GetSection("DefaultConnection")
-                        .GetSection("ConnectionString").Value);
+            con = new SqlConnection(_config                       
+                        .GetSection("ConnectionStrings")
+                        .GetSection("DefaultConnection").Value);
         }
 
         public void AddMember(CommunityCampJoinMember model)
@@ -35,6 +35,11 @@ namespace CoreMvcAppDemo.Models
         {
             return con.Query<CommunityCampJoinMember>(
                 "Select * From CommunityCampJoinMembers Order By Id Asc").ToList();
+
+            
+            //string sql = "Select * From CommunityCampJoinMembers Order By Id Asc";
+
+            //return con.Query<CommunityCampJoinMember>(sql).ToList();
         }
     }
 }
