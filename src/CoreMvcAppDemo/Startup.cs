@@ -40,6 +40,9 @@ namespace CoreMvcAppDemo
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddMemoryCache();
+            services.AddSession();
+
             services.Configure<CoreMvcAppDemoSettings>(Configuration.GetSection("CoreMvcAppDemoSettings"));
 
             services.AddAuthorization(options =>
@@ -65,6 +68,7 @@ namespace CoreMvcAppDemo
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITechRepository, TechRepository>();
+            services.AddTransient<ICommunityCampMemberRepository, CommunityCampMemberRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +101,8 @@ namespace CoreMvcAppDemo
             }
 
             app.UseApplicationInsightsExceptionTelemetry();
+
+            app.UseSession();
 
             app.UseStaticFiles();
             app.UseFileServer();
