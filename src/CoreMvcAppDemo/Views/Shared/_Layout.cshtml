@@ -27,6 +27,9 @@
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js" asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <script src="~/lib/moment/min/moment-with-locales.js"></script>
+
     <script src="~/lib/angular/angular.js"></script>
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
@@ -51,6 +54,18 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">연락처</a></li>
                     @*<li><a asp-area="" asp-controller="Home" asp-action="Chat">채팅</a></li>*@
                     <li><a asp-area="" asp-controller="DotNetNote" asp-action="Index">게시판</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">예제<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a asp-controller="RouteDemo" asp-action="Index">어트리뷰트 라우팅</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="~/Maxim/Default.html">명언 서비스</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>            
