@@ -142,8 +142,20 @@
             @if (ViewBag.SearchMode)
             {
                 <a asp-controller="DotNetNote" asp-action="Index" class="btn btn-success">검색완료</a>
-
             }
         </td>
     </tr>
 </table>
+
+@section Scripts {
+    @if (TempData["Message"] != null)
+    {
+        <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+        <script src="~/lib/toastr/toastr.js"></script>
+        <script>
+            $(function () {
+                toastr.info('@TempData["Message"]');
+            });
+        </script>
+    }
+}

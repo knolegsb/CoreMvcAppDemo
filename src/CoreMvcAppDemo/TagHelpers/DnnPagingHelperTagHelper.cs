@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreMvcAppDemo.TagHelpers
 {
+    /// <summary>
+    /// 페이징 헬퍼(dnn-paging-helper)
+    /// </summary>
     public class DnnPagingHelperTagHelper : TagHelper
     {
         public bool SearchMode { get; set; } = false;
@@ -15,6 +18,7 @@ namespace CoreMvcAppDemo.TagHelpers
         public int PageCount { get; set; }
         public int PageSize { get; set; } = 10;
         public string Url { get; set; }
+
         private int _RecordCount;
         public int RecordCount
         {

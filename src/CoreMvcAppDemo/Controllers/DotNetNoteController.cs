@@ -8,6 +8,7 @@ using CoreMvcAppDemo.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -413,6 +414,225 @@ namespace CoreMvcAppDemo.Controllers
                 ViewBag.ErrorMessage = "업데이트가 되지 않습니다. 암호를 확인하세요.";
                 return View(note);
             }
+        }
+
+        /// <summary>
+        /// 답변 글쓰기 폼
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Reply(int id)
+        {
+            ViewBag.FormType = BoardWriteFormType.Reply;
+            ViewBag.TitleDescription = "글 답변 - 다음 필드들을 채워주세요.";
+            ViewBag.SaveButtonText = "답변";
+
+            // 기존 데이터를 바인딩
+            var note = _repository.GetNoteById(id); // 기존 부모글 Id
+
+            // 새로운 note 개체 생성
+            var newNote = new Note();
+
+            // 기존 글의 제목과 내용을 새 Note 개체에 저장 후 전달
+            newNote.Title = $"Re : {note.Title}";
+            newNote.Content = $"\n\nOn {note.PostDate}, '{note.Name}' wrote:\n--------\n>" + $"{note.Content.Replace("\n", "\n>")}\n-------";
+
+            return View(newNote);
+        }
+
+        /// <summary>
+        /// 답변 글쓰기 처리 + 파일 업로드
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="files"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Reply(Note model, ICollection<IFormFile> files, int id)
+        {
+            // 파일 업로드 처리 시작
+            string fileName = String.Empty;
+            int fileSize = 0;
+
+            var uploadFolder = Path.Combine(_environment.WebRootPath, "files");
+
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    fileSize = Convert.ToInt32(file.Length);
+                    // 파일명 중복 처리
+                    fileName = Dul.FileUtility.GetFileNameWithNumbering(uploadFolder, Path.GetFileName(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')));
+                    // 파일 업로드
+                    using (var fileStream = new FileStream(Path.Combine(uploadFolder, fileName), FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
+            }
+
+            Note note = new Note();
+
+            note.Id = note.ParentNum = Convert.ToInt32(id); // 부모글 저장
+            note.Name = model.Name;
+            note.Email = Dul.HtmlUtility.Encode(model.Email);
+            note.Homepage = model.Homepage;
+            note.Title = Dul.HtmlUtility.Encode(model.Title);
+            note.Content = model.Content;
+            note.FileName = fileName;
+            note.FileSize = fileSize;
+            note.Password = model.Password;
+            note.PostIp = HttpContext.Connection.RemoteIpAddress.ToString();
+            note.Encoding = model.Encoding;
+
+            _repository.ReplyNote(note); // 데이터 답변 저장
+
+            TempData["Message"] = "데이터가 저장되었습니다.";
+
+            return RedirectToAction("Index");
+        }
+
+        public FileResult ImageDown(int id)
+        {
+            string fileName = "";
+
+            // 넘겨져 온 번호에 해당하는 파일명 가져오기(보안때문에... 파일명 숨김)
+            fileName = _repository.GetFileNameById(id);
+
+            if(fileName == null)
+            {
+                return null;
+            }
+            else
+            {
+                string strFileName = fileName;
+                string strFileExt = Path.GetExtension(strFileName);
+                string strContentType = "";
+                if (strFileExt == ".gif" || strFileExt == ".jpg" || strFileExt == ".jpeg" || strFileExt == ".png")
+                {
+                    switch (strFileExt)
+                    {
+                        case ".gif":
+                            strContentType = "image/gif";
+                            break;
+                        case ".jpg":
+                            strContentType = "image/jpeg";
+                            break;
+                        case ".jpeg":
+                            strContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            strContentType = "image/png";
+                            break;
+                    }
+                }
+                // 다운로드 카운트 증가 메서드 호출
+                _repository.UpdateDownCount(fileName);
+
+                // 이미지 파일 정보 얻기
+                byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(_environment.WebRootPath, "files") + "\\" + fileName);
+
+                // 이미지 파일 다운로드
+                return File(fileBytes, strContentType, fileName);
+            }
+        }
+
+        /// <summary>
+        /// 댓글 입력
+        /// </summary>
+        /// <param name="BoardId"></param>
+        /// <param name="txtName"></param>
+        /// <param name="txtPassword"></param>
+        /// <param name="txtOpinion"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CommentAdd(int BoardId, string txtName, string txtPassword, string txtOpinion)
+        {
+            // 댓글 개체 생성
+            NoteComment comment = new Models.NoteComment();
+            comment.BoardId = BoardId;
+            comment.Name = txtName;
+            comment.Password = txtPassword;
+            comment.Opinion = txtOpinion;
+
+            // 댓글 데이터 저장
+            _commentRepository.AddNoteComment(comment);
+
+            // 댓글 저장 후 다시 게시판 상세 보기 페이지로 이동
+            return RedirectToAction("Details", new { Id = BoardId });
+        }
+
+        /// <summary>
+        /// 댓글 삭제 폼
+        /// </summary>
+        /// <param name="BoardId"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public IActionResult CommentDelete(string BoardId, string Id)
+        {
+            ViewBag.BoardId = BoardId;
+            ViewBag.Id = Id;
+
+            return View();
+        }
+
+        /// <summary>
+        /// 댓글 삭제 처리
+        /// </summary>
+        /// <param name="BoardId"></param>
+        /// <param name="Id"></param>
+        /// <param name="txtPassword"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CommentDelete(string BoardId, string Id, string txtPassword)
+        {
+            // 현재 삭제하려는 댓글의 암호가 맞으면, 삭제 진행
+            if (_commentRepository.GetCountBy(Convert.ToInt32(BoardId), Convert.ToInt32(Id), txtPassword) > 0)
+            {
+                // 삭제 처리
+                _commentRepository.DeleteNoteComment(Convert.ToInt32(BoardId), Convert.ToInt32(Id), txtPassword);
+                // 게시판 상세 보기 페이지로 이동
+                return RedirectToAction("Details", new { Id = BoardId });
+            }
+
+            ViewBag.BoardId = BoardId;
+            ViewBag.Id = Id;
+            ViewBag.ErrorMessage = "암호가 틀립니다. 다시 입력해 주세요.";
+
+            return View();
+        }
+
+        /// <summary>
+        /// 공지글로 올리기(관리자 전용)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize("Administrators")]
+        public IActionResult Pinned(int id)
+        {
+            // 공지사항(notice)으로 올리기
+            _repository.Pinned(id);
+
+            return RedirectToAction("Details", new { Id = id });
+        }
+
+        /// <summary>
+        /// (참고) 최근 글 리스트 Web API 테스트 페이지
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult NoteServiceDemo()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// (참고) 최근 댓글 리스트 Web API 테스트 페이지
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult NoteCommentServiceDemo()
+        {
+            return View();
         }
     }
 }
