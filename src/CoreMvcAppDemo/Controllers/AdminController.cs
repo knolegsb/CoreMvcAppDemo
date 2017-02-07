@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CoreMvcAppDemo.Controllers
 {
+    //[Authorize("Administrators")]
     public class AdminController : Controller
     {
         //[Authorize(Roles = "Users")]

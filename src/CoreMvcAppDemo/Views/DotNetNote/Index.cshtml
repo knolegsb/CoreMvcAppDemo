@@ -41,6 +41,7 @@
                 </tr>
 
                 <cache>
+                @*<cache expires-after="@TimeSpan.FromMinutes(10)"*@
                     @*최근 공지 글 2개 출력: 캐싱 적용*@
                     @foreach (var item in DnnRepo.GetNoteSummaryByCategory("Notice").Take(2))
                     {
