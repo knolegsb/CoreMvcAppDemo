@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CoreMvcAppDemo.Models.DNN
+namespace CoreMvcAppDemo.Models
 {
     /// <summary>
     /// 댓글 뷰 모델
@@ -14,6 +14,7 @@ namespace CoreMvcAppDemo.Models.DNN
     {
         public int Id { get; set; }
         public string BoardName { get; set; }
+        public int BoardId { get; set; }
 
         [Required(ErrorMessage = "이름을 입력하세요.")]
         public string Name { get; set; }

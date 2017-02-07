@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CoreMvcAppDemo.Models.DNN
+namespace CoreMvcAppDemo.Models
 {
     /// <summary>
     /// Note 클래스: Notes 테이블과 일대일 매핑되는 ViewModel 클래스
@@ -12,7 +12,7 @@ namespace CoreMvcAppDemo.Models.DNN
     public class Note
     {
         [Display(Name = "번호")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "작성자")]
         [Required(ErrorMessage = "* 이름을 작성해 주세요.")]

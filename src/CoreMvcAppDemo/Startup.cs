@@ -11,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 using CoreMvcAppDemo.Models;
 using Microsoft.AspNetCore.Http;
 using CoreMvcAppDemo.Settings;
+using CoreMvcAppDemo.Models;
 
 namespace CoreMvcAppDemo
 {
@@ -22,6 +23,7 @@ namespace CoreMvcAppDemo
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"Settings\\CoreMvcAppDemoSettings.json", optional: true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
@@ -39,6 +41,7 @@ namespace CoreMvcAppDemo
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+            services.Configure<CoreMvcAppDemoSettings>(Configuration.GetSection("CoreMvcAppDemoSettings"));
 
             services.AddMemoryCache();
             services.AddSession();
@@ -69,6 +72,8 @@ namespace CoreMvcAppDemo
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ITechRepository, TechRepository>();
             services.AddTransient<ICommunityCampMemberRepository, CommunityCampMemberRepository>();
+            services.AddTransient<INoteRepository, NoteRepository>();
+            services.AddSingleton<INoteCommentRepository>(new NoteCommentRepository(Configuration["ConnectionStrings:DefaultConnection"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

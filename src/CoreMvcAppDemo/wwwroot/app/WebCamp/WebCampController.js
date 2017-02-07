@@ -20,7 +20,7 @@
     function webCampListController($scope, $http) {
         $scope.title = 'Speaker List';
 
-        $http.get('/api/WebCampService').success(function (data) {
+        $http.get('/api/WebCampService').then(function (data) {
             $scope.speakers = data.data;
         });
 
@@ -32,8 +32,8 @@
     function webCampDetailsController($scope, $routeParams, $http) {
         $scope.title = 'Speaker Details';
 
-        $http.get('/api/WebCampService').success(function (data) {
-            $scope.speakers = data;
+        $http.get('/api/WebCampService').then(function (data) {
+            $scope.speakers = data.data;
 
             $scope.id = $routeParams.id;
 
