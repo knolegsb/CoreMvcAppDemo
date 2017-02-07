@@ -10,11 +10,11 @@ using CoreMvcAppDemo.Models;
 namespace CoreMvcAppDemo.Controllers
 {
     [Route("api/[controller]")]
-    public class NoteServiceController : Controller
+    public class NoteCommentServiceController : Controller
     {
         private INoteCommentRepository _repository;
 
-        public NoteServiceController(INoteCommentRepository repository)
+        public NoteCommentServiceController(INoteCommentRepository repository)
         {
             _repository = repository;
         }

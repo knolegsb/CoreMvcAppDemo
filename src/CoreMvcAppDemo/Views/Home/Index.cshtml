@@ -65,7 +65,7 @@
     </a>
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-3">
         <h2>Application uses</h2>
         <ul>
@@ -106,4 +106,189 @@
             <li><a href="http://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
         </ul>
     </div>
+</div>*@
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-gear fa-spin fa-fw"></i>
+            <span class="sprite sprite_notice">
+                공지사항
+                <i style="font-size:small;">(with ViewComponent)</i>
+            </span>
+        </h3>
+        @await Component.InvokeAsync("MainSummaryByCategory", new { category = "Notice" })
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                자유게시판
+                <i style="font-size:small;">(with ViewComponent)</i>
+            </span>
+        </h3>
+        @await Component.InvokeAsync("MainSummaryByCategory", new { category = "Free" })
+    </div>
 </div>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-gear fa-spin fa-fw"></i>
+            <span class="sprite sprite_notice">
+                공지사항
+                <i style="font-size:small;">(with TagHelper)</i>
+            </span>
+        </h3>
+        <dnn-main-summary category="Notice"></dnn-main-summary>
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                자유게시판
+                <i style="font-size:small;">(with TagHelper)</i>
+            </span>
+        </h3>
+        <dnn-main-summary category="Free"></dnn-main-summary>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-list-ol"></i>&nbsp;&nbsp;
+            <span class="sprite fa-sprite_notice">
+                최근 글 리스트
+                <i style="font-size:small;">(with MVC Partial View)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_MainSummary.cshtml", ViewData["RecentPost"])
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-indent"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 댓글 리스트
+                <i style="font-size:small;">(with MVC Partial View)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_MainCommentSummary.cshtml", ViewData["RecentComment"])
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 글 리스트
+                <i style="font-size:small;">(with ViewComponent)</i>
+            </span>
+        </h3>
+        @await Component.InvokeAsync("WhatsNew")
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 댓글 리스트
+                <i style="font-size:small;">(with ViewComponent)</i>
+            </span>
+        </h3>
+        @await Component.InvokeAsync("RecentlyCommentList")
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 글 리스트
+                <i style="font-size: small;">(with Web API + jQuery)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_RecentlyNoteList.cshtml")
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 댓글 리스트
+                <i style="font-size:small;">(with Web API + jQuery)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_RecentlyNoteCommentList.cshtml")
+    </div>
+</div>
+<br />
+
+<div class="row" ng-app="DotNetNoteApp">
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-action="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 글 리스트
+                <i style="font-size:small;">(with Web API + Angular)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_RecentlyNoteListWithAngular.cshtml")
+    </div>
+    <div class="col-md-6">
+        <h3 class="MainSummaryTitle">
+            <a class="readMore" asp-controller="DotNetNote" asp-actioin="Index" title="닷넷노트">리스트</a>
+            <i class="fa fa-table"></i>&nbsp;&nbsp;
+            <span class="sprite sprite_notice">
+                최근 댓글 리스트
+                <i style="font-size:small;">(with Web API + Angular)</i>
+            </span>
+        </h3>
+        @Html.Partial("~/Views/DotNetNote/_RecentlyNoteCommentListWithAngular.cshtml")
+    </div>
+</div>
+<br />
+
+@await Html.PartialAsync("~/Views/DotNetNote/_NewPhotos.cshtml", ViewData["Photos"])
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3><i class="fa fa-wrench"></i>현재 사이트에서 사용된 기술 리스트</h3>
+        <h4>ViewComponent 사용 출력</h4>
+        @await Component.InvokeAsync("TechList")
+    </div>
+    <div class="col-md-6">
+        <h3><i class="fa fa-sitemap"></i> 현재 사이트와 관련된 추천 사이트</h3>
+        <h4>ViewComponent 사용 출력</h4>
+        @await Component.InvokeAsync("SiteList")
+    </div>
+</div>
+<hr />
+
+<div class="text-center">
+    <em>
+        @ViewBag.SiteName<text>(</text>@ViewBag.SiteUrl@(")") 사이트는 ASP.NET Core 1.0 데모 사이트입니다.
+    </em>
+</div>
+
+@*@await Component.InvokeAsync("Copyright")*@
+
+@section Scripts{
+    <script src="~/app/DotNetNote/DotNetNoteApp.js"></script>
+}
